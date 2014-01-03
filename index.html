@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>CFS</title>
+
+    <link href="sticky-footer.css" rel="stylesheet">
+    <link href="bootstrap.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+    <script type="text/javascript" src="scripts/shCore.js"></script>
+    <script type="text/javascript" src="scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="scripts/shBrushPhp.js"></script>
+    <script type="text/javascript" src="scripts/shBrushSql.js"></script>
+    <script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+    <script type="text/javascript" src="scripts/shBrushPlain.js"></script>
+    <script type="text/javascript" src="scripts/shBrushPython.js"></script>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="CFS.js"></script>
+    <script src="CFSView.js"></script>
+    <style type="text/css">
+    .syntaxhighlighter { 
+         overflow-y: auto !important; 
+         overflow-x: auto !important;
+         max-height: 700px;
+      }
+      .syntaxhighlighter .line {
+        white-space: pre-wrap !important; /* make code wrap */
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div id="wrap">
+      <div class="container">
+        <div class="page-header">
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" id="title">CFS File Viewer</div>
+          <div id="filePanel" class="input-group panel-body">
+          <div class="col-md-10">
+            <input type="text" value="" id="fileID" class="form-control" placeholder="File ID" />
+          </div>
+          <div class="col-md-2">
+            <select class="form-control" id="langCombo">
+              <option value="plain">Plain</option>
+              <option value="php">PHP</option>
+              <option value="js">JavaScript</option>
+              <option value="sql">SQL</option>
+              <option value="cpp">C++</option>
+              <option value="csharp">C#</option>
+              <option value="python">Python</option>
+            </select>
+          </div>
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" onclick="showContents()">View!</button>
+          </span>
+        </div>
+
+        <pre id="contents" class="brush: js;"></pre>
+
+        <a href="?id=314&lang=plain" onclick="">Need Help?</a>
+      </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+
+$(function(){
+  if (getUrlVars()["id"] != null)
+  {
+    $("#filePanel").hide();
+    $("#fileID").val(getUrlVars()["id"]);
+    if (getUrlVars()["lang"] != null)
+      $("#langCombo").val(getUrlVars()["lang"]);
+    showContents();
+  }
+});
+
+function showFile(id, lang)
+{
+  $("#fileID").val(id);
+  $("#langCombo").val(lang);
+  showContents();
+}
+
+function showContents()
+{
+  $("#contents").html("<div style='text-align:center'><img src='load.gif' /></div>");
+  $("#contents").attr("class", "brush: " + $("#langCombo").val() + ";");
+  var id = $("#fileID").val();
+  Contents(id, "", function(data)
+  {
+    window.history.pushState(data, "file" + id, "?id=" + id + "&lang=" + $("#langCombo").val());
+    $("#title").html(data.file.title);
+    $("title").html(data.file.title);    
+    $("#contents").html("");
+    document.getElementById('contents').appendChild(document.createTextNode(data.answer));
+    SyntaxHighlighter.highlight()
+    $("#filePanel").slideUp();
+  });
+}
+
+
+function getUrlVars() {
+  var vars = {};
+  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+    vars[key] = value;
+  });
+  return vars;
+}
+
+</script>

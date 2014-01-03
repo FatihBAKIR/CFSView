@@ -1,0 +1,11 @@
+-What is this?
+This is CFSViewer, it is a web application which lets you view files in the CFS servers.
+http://viewer.cfshq.org app works with the http://cfs.fatihbakir.net repository. 
+If you want to have a viewer for another repository, you can download the sources and modify the server string.
+
+-Where can I download it?
+http://www.cfshq.org
+
+Fatih BAKIR
+http://www.fatihbakir.net
+fatih@fatihbakir.net
